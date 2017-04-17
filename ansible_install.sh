@@ -48,7 +48,7 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
-    yum -y install python-devel MySQL-python sshpass && pip install pyrax pysphere boto passlib dnspython
+    yum -y install python-devel MySQL-python sshpass && pip2 installpyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
@@ -76,11 +76,11 @@ if [ ! $(which ansible-playbook) ]; then
       easy_install pip
     fi
     # If python-keyczar apt package does not exist, use pip
-    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip install python-keyczar
+    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip2 installpython-keyczar
 
     # Install passlib for encrypt
     apt-get install -y build-essential
-    apt-get install -y python-all-dev python-mysqldb sshpass && pip install pyrax pysphere boto passlib dnspython
+    apt-get install -y python-all-dev python-mysqldb sshpass && pip2 installpyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     apt-get install -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
@@ -94,9 +94,9 @@ if [ ! $(which ansible-playbook) ]; then
   mkdir /etc/ansible/
   echo -e '[local]\nlocalhost\n' > /etc/ansible/hosts
   if [ -z $ANSIBLE_VERSION ]; then
-    pip install ansible
+    pip2 installansible
   else
-    pip install ansible==${ANSIBLE_VERSION}
+    pip2 installansible==${ANSIBLE_VERSION}
   fi
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ] || grep -q 'Amazon Linux' /etc/system-release; then
     # Fix for pycrypto pip / yum issue
@@ -104,7 +104,7 @@ if [ ! $(which ansible-playbook) ]; then
     if  ansible --version 2>&1  | grep -q "AttributeError: 'module' object has no attribute 'HAVE_DECL_MPZ_POWM_SEC'" ; then
       echo 'WARN: Re-installing python-crypto package to workaround ansible/ansible#276'
       echo 'WARN: https://github.com/ansible/ansible/issues/276'
-      pip uninstall -y pycrypto
+      pip2 uninstall -y pycrypto
       yum erase -y python-crypto
       yum install -y python-crypto python-paramiko
     fi
