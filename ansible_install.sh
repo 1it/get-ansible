@@ -48,7 +48,7 @@ if [ ! $(which ansible-playbook) ]; then
 
     # Install passlib for encrypt
     yum -y groupinstall "Development tools"
-    yum -y install python-devel MySQL-python sshpass && pip2 installpyrax pysphere boto passlib dnspython
+    yum -y install python-devel MySQL-python sshpass && pip2 install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     yum -y install bzip2 file findutils git gzip hg svn sudo tar which unzip xz zip libselinux-python
@@ -76,11 +76,11 @@ if [ ! $(which ansible-playbook) ]; then
       easy_install pip
     fi
     # If python-keyczar apt package does not exist, use pip
-    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip2 installpython-keyczar
+    [ -z "$( apt-cache search python-keyczar )" ] && sudo pip2 install python-keyczar
 
     # Install passlib for encrypt
     apt-get install -y build-essential
-    apt-get install -y python-all-dev python-mysqldb sshpass && pip2 installpyrax pysphere boto passlib dnspython
+    apt-get install -y python-all-dev python-mysqldb sshpass && pip2 install pyrax pysphere boto passlib dnspython
 
     # Install Ansible module dependencies
     apt-get install -y bzip2 file findutils git gzip mercurial procps subversion sudo tar debianutils unzip xz-utils zip python-selinux
@@ -91,12 +91,16 @@ if [ ! $(which ansible-playbook) ]; then
     echo 'WARN: Not all functionality of ansible may be available'
   fi
 
-  mkdir /etc/ansible/
-  echo -e '[local]\nlocalhost\n' > /etc/ansible/hosts
+  mkdir -p /etc/ansible/
+
+  if [ ! -f /etc/ansible/hosts ]; then
+    echo -e '[local]\nlocalhost\n' > /etc/ansible/hosts
+  fi
+
   if [ -z $ANSIBLE_VERSION ]; then
-    pip2 installansible
+    pip2 install ansible
   else
-    pip2 installansible==${ANSIBLE_VERSION}
+    pip2 install ansible==${ANSIBLE_VERSION}
   fi
   if [ -f /etc/centos-release ] || [ -f /etc/redhat-release ] || [ -f /etc/oracle-release ] || [ -f /etc/system-release ] || grep -q 'Amazon Linux' /etc/system-release; then
     # Fix for pycrypto pip / yum issue
