@@ -1,5 +1,4 @@
-#!/bin/sh
-#TODO.md
+#!/usr/bin/env bash
 
 if [ "$1" = "-v" ]; then
   ANSIBLE_VERSION="${2}"
@@ -38,7 +37,7 @@ if [ ! $(which ansible-playbook) ]; then
     # One more time with EPEL to avoid failures
     yum_makecache_retry
 
-    yum -y install python-pip PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko git
+    yum -y install python-pip python-crypto PyYAML python-jinja2 python-httplib2 python-keyczar python-paramiko git
     # If python-pip install failed and setuptools exists, try that
     if [ -z "$(which pip)" -a -z "$(which easy_install)" ]; then
       yum -y install python-setuptools
@@ -64,7 +63,7 @@ if [ ! $(which ansible-playbook) ]; then
     # apt-get install -y ansible
 
     # Install required Python libs and pip
-    apt-get install -y  python-pip python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
+    apt-get install -y  python-pip python-crypto python-yaml python-jinja2 python-httplib2 python-paramiko python-pkg-resources
     [ -n "$( apt-cache search python-keyczar )" ] && apt-get install -y  python-keyczar
     if ! apt-get install -y git ; then
       apt-get install -y git-core
